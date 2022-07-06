@@ -24,27 +24,14 @@ jobs:
       env:
         type: string
         default: development
+    docker:
+      - image: circleci/python:3.6.1
     steps:
       - checkout
       - run:
           name: Debug
           command: |
             echo "The current environment name is << parameters.env >>"
-  development:
-    docker:
-      - image: circleci/python:3.6.1
-    steps:
-      - build-and-test
-  staging:
-    docker:
-      - image: circleci/python:3.6.1
-    steps:
-      - build-and-test
-  production:
-    docker:
-      - image: circleci/python:3.6.1
-    steps:
-      - build-and-test
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -52,17 +39,17 @@ workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - development:
+      - build-and-test:
           env: development
           filters:
             branches:
               only: develop
-      - staging:
+      - build-and-test:
           env: staging
           filters:
             branches:
               only: staging
-      - production:
+      - build-and-test:
           env: production
           filters:
             branches:
