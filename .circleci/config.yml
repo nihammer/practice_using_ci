@@ -16,7 +16,6 @@ commands:
     parameters: 
       env:
         type: string
-        default: development
     steps:
       - checkout
       - run:
@@ -36,7 +35,6 @@ jobs:
     parameters: 
       env:
         type: string
-        default: development
     docker:
       - image: circleci/python:3.6.1
     steps:
@@ -49,17 +47,20 @@ jobs:
     docker:
       - image: circleci/python:3.6.1
     steps:
-      - first_command
+      - first_command:
+          env: development
   staging:
     docker:
       - image: circleci/python:3.6.1
     steps:
-      - first_command
+      - first_command:
+          env: staging
   production:
     docker:
       - image: circleci/python:3.6.1
     steps:
-      - first_command
+      - first_command:
+          env: production
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
