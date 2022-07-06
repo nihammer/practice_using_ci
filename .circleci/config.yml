@@ -11,10 +11,23 @@ orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@1.5.0
 
+commands:
+  first_command:
+    parameters: 
+      env:
+        type: string
+        default: development
+    steps:
+      - checkout
+      - run:
+          name: print the current environment name
+          command: |
+            echo "The current environment name in this test is << parameters.env >>"
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build-and-test: # This is the name of the job, feel free to change it to better match what you're trying to do!
+  build: # This is the name of the job, feel free to change it to better match what you're trying to do!
     # Checkout the code as the first step. This is a dedicated CircleCI step.
     # The python orb's install-packages step will install the dependencies from a Pipfile via Pipenv by default.
     # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
@@ -31,7 +44,22 @@ jobs:
       - run:
           name: Debug
           command: |
-            echo "The current environment name is << parameters.env >>"
+            echo "The current environment name in the build job is << parameters.env >>"
+  development:
+    docker:
+      - image: circleci/python:3.6.1
+    steps:
+      - first_command
+  staging:
+    docker:
+      - image: circleci/python:3.6.1
+    steps:
+      - first_command
+  production:
+    docker:
+      - image: circleci/python:3.6.1
+    steps:
+      - first_command
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -39,18 +67,39 @@ workflows:
   sample: # This is the name of the workflow, feel free to change it to better match your workflow.
     # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build-and-test:
+      - build:
+          name: build-development
           env: development
           filters:
             branches:
               only: develop
-      - build-and-test:
+      - build:
+          name: build-staging
           env: staging
           filters:
             branches:
               only: staging
-      - build-and-test:
+      - build:
+          name: build-production
           env: production
+          filters:
+            branches:
+              only: main
+      - development:
+          requires:
+            - build-development
+          filters:
+            branches:
+              only: develop
+      - staging:
+          requires:
+            - build-staging
+          filters:
+            branches:
+              only: staging
+      - production:
+          requires:
+            - build-production
           filters:
             branches:
               only: main
