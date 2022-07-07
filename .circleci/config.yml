@@ -22,6 +22,11 @@ commands:
           name: print the current environment name
           command: |
             echo "The current environment name in this test is << parameters.env_name >>"
+            if [ "<< parameters.env_name >>" == "prod" ]; then
+              echo "This is the production environment."
+            elif [ "<< parameters.env_name >>" == "stg" ]; then
+              echo "This is the staging environment."
+            fi
 
   second_command:
     parameters: 
