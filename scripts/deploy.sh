@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set variables
-PROJECT_PATH='/home/root'
+PROJECT_PATH='/home'
 
 main() {
   pwd
