@@ -14,14 +14,31 @@ orbs:
 commands:
   first_command:
     parameters: 
-      env:
+      env_name:
         type: string
     steps:
       - checkout
       - run:
           name: print the current environment name
           command: |
-            echo "The current environment name in this test is << parameters.env >>"
+            echo "The current environment name in this test is << parameters.env_name >>"
+
+  second_command:
+    parameters: 
+      env_file_path:
+        type: string
+      deploy_file_name:
+        type: string
+    steps:
+      - run:
+          name: print the s3 file path
+          command: |
+            echo "S3 URL: s3://path-url.com/<< parameters.env_file_path >>"
+      - run:
+          name: deploy
+          command: |
+            chmod +x ./scripts/*
+            ./scripts/<< parameters.deploy_file_name >>.sh
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
@@ -48,19 +65,25 @@ jobs:
       - image: circleci/python:3.6.1
     steps:
       - first_command:
-          env: development
+          env_name: dev
   staging:
     docker:
       - image: circleci/python:3.6.1
     steps:
       - first_command:
-          env: staging
+          env_name: stg
+      - second_command:
+          env_file_path: staging/.env.staging
+          deploy_file_name: deploy
   production:
     docker:
       - image: circleci/python:3.6.1
     steps:
       - first_command:
-          env: production
+          env_name: prod
+      - second_command:
+          env_file_path: master/.env.production
+          deploy_file_name: deploy
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
