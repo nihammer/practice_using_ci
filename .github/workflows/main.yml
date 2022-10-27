@@ -3,8 +3,6 @@ name: Test to run a Github action thread
 on:
   push:
     branches: [ "rev", "main" ]
-
-on:
   workflow_dispatch:
 
 jobs:
