@@ -8,7 +8,7 @@ RUN /bin/cp -f /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 RUN apt-get update && apt-get -y install git
 ## AWS CLI のインストール
 RUN apt-get update && apt-get -y install wget python
-RUN wget https://bootstrap.pypa.io/get-pip.py
+RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
 RUN python get-pip.py
 RUN pip install --upgrade awscli
 
@@ -28,7 +28,8 @@ RUN apt-get update && apt-get -y install sudo curl \
  && curl -L https://toolbelt.treasuredata.com/sh/install-ubuntu-xenial-td-agent2.sh | sh
 
 ### 言語系のバージョンマネージャ asdf のインストール
-RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.3.0 \
+RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
+ && (cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)") \ 
  && bash -c "echo -e '\n. $HOME/.asdf/asdf.sh' >> ~/.bashrc" \
  && bash -c "echo -e '\n. $HOME/.asdf/completions/asdf.bash' >> ~/.bashrc" \
  && chmod +x $HOME/.asdf/asdf.sh \
@@ -53,10 +54,8 @@ RUN apt-get update && apt-get -y install ruby \
  && gem update --system
 
 ### NodeJS/npm のインストール
-RUN apt-get update && apt-get -y install gnupg
+RUN apt-get update && apt-get -y install gnupg && libdigest-sha-perl
 RUN ~/.asdf/bin/asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
- && bash ~/.asdf/plugins/nodejs/bin/import-release-team-keyring \
- && apt-get -y install libdigest-sha-perl \
  && ~/.asdf/bin/asdf install nodejs 6.10.3 \
  && ~/.asdf/bin/asdf global nodejs 6.10.3 \
  && ~/.asdf/bin/asdf reshim nodejs 6.10.3
