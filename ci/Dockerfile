@@ -36,6 +36,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
  && chmod +x $HOME/.asdf/completions/asdf.bash \
  && bash -c ". ~/.bashrc" \
  && apt-get update && apt-get -y install automake autoconf libreadline-dev libncurses-dev libssl-dev libyaml-dev libxslt-dev libffi-dev libtool unixodbc-dev
+ENV PATH ~/.asdf/bin/:$PATH
 
 ### Erlang のインストール
 RUN apt-get update && apt-get -y install make rebar xsltproc fop libxml2-utils
@@ -54,7 +55,7 @@ RUN apt-get update && apt-get -y install ruby \
  && gem update --system
 
 ### NodeJS/npm のインストール
-RUN apt-get update && apt-get -y install gnupg && libdigest-sha-perl
+RUN apt-get update && apt-get -y install gnupg libdigest-sha-perl
 RUN ~/.asdf/bin/asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
  && ~/.asdf/bin/asdf install nodejs 6.10.3 \
  && ~/.asdf/bin/asdf global nodejs 6.10.3 \
