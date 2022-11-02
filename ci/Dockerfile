@@ -5,7 +5,7 @@ FROM debian:9.1
 RUN /bin/cp -f /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 ## 共通パッケージのインストール
-RUN apt-get update && apt-get -y install git
+RUN apt-get update && apt-get -y install git curl
 ## AWS CLI のインストール
 RUN apt-get update && apt-get -y install wget python
 RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
@@ -14,18 +14,18 @@ RUN pip install --upgrade awscli
 
 ### 各種ソフトウェアのインストール
 #### Redis のインストール
-RUN apt-get update && apt-get -y install redis-server
+# RUN apt-get update && apt-get -y install redis-server
 
 #### MySQL のインストール
-RUN apt-get update && apt-get -y install mysql-server
+# RUN apt-get update && apt-get -y install mysql-server
 
 #### DynamoDB local のインストール
-RUN wget https://s3-ap-northeast-1.amazonaws.com/dynamodb-local-tokyo/dynamodb_local_latest.tar.gz \
- && tar zxfv dynamodb_local_latest.tar.gz
+# RUN wget https://s3-ap-northeast-1.amazonaws.com/dynamodb-local-tokyo/dynamodb_local_latest.tar.gz \
+#  && tar zxfv dynamodb_local_latest.tar.gz
 
 #### td-agent のインストール
-RUN apt-get update && apt-get -y install sudo curl \
- && curl -L https://toolbelt.treasuredata.com/sh/install-ubuntu-xenial-td-agent2.sh | sh
+# RUN apt-get update && apt-get -y install sudo curl \
+#  && curl -L https://toolbelt.treasuredata.com/sh/install-ubuntu-xenial-td-agent2.sh | sh
 
 ### 言語系のバージョンマネージャ asdf のインストール
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
@@ -38,14 +38,14 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
  && apt-get update && apt-get -y install automake autoconf libreadline-dev libncurses-dev libssl-dev libyaml-dev libxslt-dev libffi-dev libtool unixodbc-dev
 
 ### Erlang のインストール
-RUN apt-get update && apt-get -y install make
-RUN ~/.asdf/bin/asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git \
+RUN apt-get update && apt-get -y install make rebar xsltproc fop libxml2-utils
+RUN ~/.asdf/bin/asdf plugin-add erlang \
  && ~/.asdf/bin/asdf install erlang 20.2 \
  && ~/.asdf/bin/asdf global erlang 20.2
 
 ### Elixir のインストール
 RUN apt-get update && apt-get -y install unzip \
- && ~/.asdf/bin/asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git \
+ && ~/.asdf/bin/asdf plugin-add elixir \
  && ~/.asdf/bin/asdf install elixir 1.6.6 \
  && ~/.asdf/bin/asdf global elixir 1.6.6
 
