@@ -27,6 +27,7 @@ RUN pip install --upgrade awscli
 # RUN apt-get update && apt-get -y install sudo curl \
 #  && curl -L https://toolbelt.treasuredata.com/sh/install-ubuntu-xenial-td-agent2.sh | sh
 
+
 ### 言語系のバージョンマネージャ asdf のインストール
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
  && (cd ~/.asdf && git checkout "$(git describe --abbrev=0 --tags)") \ 
