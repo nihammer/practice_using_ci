@@ -27,12 +27,12 @@ jobs:
         name: Docker build
         continue-on-error: true
         run: |
-          docker --help
-          ls -l ./ci
+          docker build -t say-hello ./ci
+          docker save -o ./ci/say-hello.tar say-hello
 
       - name: Try to run docker command
         run: |
-          docker --help
+          docker load -i ./ci/say-hello.tar
 
      # - name: Hello world action step
      #   uses: ./.github/actions/docker-build-action # Uses an action in the root directory
