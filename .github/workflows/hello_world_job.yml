@@ -42,3 +42,18 @@ jobs:
      # # Use the output from the `hello` step
      # - name: Get the output time
      #   run: echo "The time was ${{ steps.hello.outputs.time }}"
+
+  container-test-job:
+  runs-on: ubuntu-latest
+  container:
+    image: say-hello
+    env:
+      NODE_ENV: development
+    ports:
+      - 80
+    volumes:
+      - ./ci:/root
+    options: --cpus 1
+  steps:
+    - name: Check for dockerenv file
+      run: (ls /.dockerenv && echo Found dockerenv) || (echo No dockerenv)
