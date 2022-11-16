@@ -9,11 +9,31 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Hello world action step
-        uses: ./.github/actions/docker-build-action # Uses an action in the root directory
-        id: hello
+      - name: Cache docker build
+        id: cache-docker-build
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-docker-build
         with:
-          who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          # docker cache files are stored in `./ci/Dockerfile` on Linux/macOS
+          path: ./ci
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./ci/Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit == 'false' }}
+        name: Docker build
+        continue-on-error: true
+        run: |
+          docker --help
+
+     # - name: Hello world action step
+     #   uses: ./.github/actions/docker-build-action # Uses an action in the root directory
+     #   id: hello
+     #   with:
+     #     who-to-greet: 'Mona the Octocat'
+     # # Use the output from the `hello` step
+     # - name: Get the output time
+     #   run: echo "The time was ${{ steps.hello.outputs.time }}"
