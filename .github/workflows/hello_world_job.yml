@@ -28,6 +28,11 @@ jobs:
         continue-on-error: true
         run: |
           docker --help
+          ls -l ./ci
+
+      - name: Try to run docker command
+        run: |
+          docker --help
 
      # - name: Hello world action step
      #   uses: ./.github/actions/docker-build-action # Uses an action in the root directory
