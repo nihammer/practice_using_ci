@@ -4,6 +4,7 @@ FROM debian:9.1
 ## タイムゾーン設定
 RUN /bin/cp -f /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
+
 ## 共通パッケージのインストール
 RUN apt-get update && apt-get -y install git curl
 ## AWS CLI のインストール
