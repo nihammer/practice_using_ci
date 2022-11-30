@@ -9,15 +9,20 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Checksum the "./ci" directory
+        run: |
+          find ./ci -type f -exec cksum {} \; | sort -k 2 > checksumResultOfDockerBuildContext.txt
+          echo "HashFiles: ${{ hashFiles('./ci/checksumResultOfDockerBuildContext') }}"
       - name: Cache docker build
         id: cache-docker-build
         uses: actions/cache@v3
         env:
           cache-name: cache-docker-build
         with:
-          # docker cache files are stored in `./ci/Dockerfile` on Linux/macOS
+          # docker cache files are stored in `./ci` directory on Linux/macOS
           path: ./ci
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./ci/Dockerfile') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./ci/checksumResultOfDockerBuildContext') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
