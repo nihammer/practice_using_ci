@@ -14,9 +14,9 @@ jobs:
         run: |
           pwd
           find ./ci -type f -exec cksum {} \; | sort -k 2 > checksumResultOfDockerBuildContext.txt
-          ls -la ./ci
-          hashFiles('./ci/checksumResultOfDockerBuildContext')
-          echo "HashFiles ${{ hashFiles('./ci/checksumResultOfDockerBuildContext') }}"
+          ls -la
+          cat checksumResultOfDockerBuildContext.txt
+          cksum checksumResultOfDockerBuildContext.txt | awk '{ print $1 }'
       - name: Cache docker build
         id: cache-docker-build
         uses: actions/cache@v3
@@ -25,7 +25,7 @@ jobs:
         with:
           # docker cache files are stored in `./ci` directory on Linux/macOS
           path: ./ci
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./ci/checksumResultOfDockerBuildContext') }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./checksumResultOfDockerBuildContext') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
