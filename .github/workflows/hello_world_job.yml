@@ -12,11 +12,7 @@ jobs:
 
       - name: Checksum the "./ci" directory
         run: |
-          pwd
           find ./ci -type f -exec cksum {} \; | sort -k 2 > checksumResultOfDockerBuildContext.txt
-          ls -la
-          cat checksumResultOfDockerBuildContext.txt
-          cksum checksumResultOfDockerBuildContext.txt | awk '{ print $1 }'
       - name: Cache docker build
         id: cache-docker-build
         uses: actions/cache@v3
