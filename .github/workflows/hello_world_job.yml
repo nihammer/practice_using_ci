@@ -12,6 +12,8 @@ jobs:
 
       - name: Checksum the "./ci" directory
         run: |
+          pwd
+          ls -la
           find ./ci -type f -exec cksum {} \; | sort -k 2 > checksumResultOfDockerBuildContext.txt
           echo "HashFiles: ${{ hashFiles('./ci/checksumResultOfDockerBuildContext') }}"
       - name: Cache docker build
