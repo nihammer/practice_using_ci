@@ -53,8 +53,8 @@ RUN apt-get update && apt-get -y install unzip \
  && ~/.asdf/bin/asdf global elixir 1.6.6
 
 ### Ruby のインストール
-RUN apt-get update && apt-get -y install ruby \
- && gem update --system
+# RUN apt-get update && apt-get -y install ruby \
+#  && gem update --system
 
 ### NodeJS/npm のインストール
 RUN apt-get update && apt-get -y install gnupg libdigest-sha-perl
