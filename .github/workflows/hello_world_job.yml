@@ -22,10 +22,6 @@ jobs:
           # docker cache files are stored in `./ci` directory on Linux/macOS
           path: ./ci
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./checksumResultOfDockerBuildContext.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
 
       - if: ${{ steps.cache-docker-build.outputs.cache-hit == 'false' }}
         name: Docker build
@@ -43,6 +39,7 @@ jobs:
         id: hello
         with:
           who-to-greet: 'Mona the Octocat'
+          comments: 'This is a comment.'
       # Use the output from the `hello` step
       - name: Get the output time
         run: echo "The time was ${{ steps.hello.outputs.time }}"
