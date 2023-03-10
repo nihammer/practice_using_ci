@@ -41,41 +41,44 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
 ENV PATH ~/.asdf/bin/:$PATH
 
 ### Erlang のインストール
-RUN apt-get update && apt-get -y install make rebar xsltproc fop libxml2-utils
-RUN ~/.asdf/bin/asdf plugin-add erlang \
- && ~/.asdf/bin/asdf install erlang 20.2 \
- && ~/.asdf/bin/asdf global erlang 20.2
+# RUN apt-get update && apt-get -y install make rebar xsltproc fop libxml2-utils
+# RUN ~/.asdf/bin/asdf plugin-add erlang \
+#  && ~/.asdf/bin/asdf install erlang 20.2 \
+#  && ~/.asdf/bin/asdf global erlang 20.2
 
 ### Elixir のインストール
-RUN apt-get update && apt-get -y install unzip \
- && ~/.asdf/bin/asdf plugin-add elixir \
- && ~/.asdf/bin/asdf install elixir 1.6.6 \
- && ~/.asdf/bin/asdf global elixir 1.6.6
+# RUN apt-get update && apt-get -y install unzip \
+#  && ~/.asdf/bin/asdf plugin-add elixir \
+#  && ~/.asdf/bin/asdf install elixir 1.6.6 \
+#  && ~/.asdf/bin/asdf global elixir 1.6.6
 
 ### Ruby のインストール
 # RUN apt-get update && apt-get -y install ruby \
 #  && gem update --system
 
 ### NodeJS/npm のインストール
-RUN apt-get update && apt-get -y install gnupg libdigest-sha-perl
-RUN ~/.asdf/bin/asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
- && ~/.asdf/bin/asdf install nodejs 6.10.3 \
- && ~/.asdf/bin/asdf global nodejs 6.10.3 \
- && ~/.asdf/bin/asdf reshim nodejs 6.10.3
+# RUN apt-get update && apt-get -y install gnupg libdigest-sha-perl
+# RUN ~/.asdf/bin/asdf plugin-add nodejs https://github.com/asdf-vm/asdf-nodejs.git \
+#  && ~/.asdf/bin/asdf install nodejs 6.10.3 \
+#  && ~/.asdf/bin/asdf global nodejs 6.10.3 \
+#  && ~/.asdf/bin/asdf reshim nodejs 6.10.3
 
 ### NodeJS/npm のバージョンアップ
-RUN ~/.asdf/bin/asdf install nodejs 10.24.1 \
- && ~/.asdf/bin/asdf global nodejs 10.24.1 \
- && ~/.asdf/bin/asdf reshim nodejs 10.24.1
+# RUN ~/.asdf/bin/asdf install nodejs 10.24.1 \
+#  && ~/.asdf/bin/asdf global nodejs 10.24.1 \
+#  && ~/.asdf/bin/asdf reshim nodejs 10.24.1
 
 ## Erlang ビルドのために rebar をインストールする
-RUN apt-get update && apt-get install -y rebar
+# RUN apt-get update && apt-get install -y rebar
 
 ### SSH接続で22番ポートを使用することを明示
 EXPOSE 22
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 COPY entrypoint.sh /entrypoint.sh
+
+# Echo environtment variables
+RUN env
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
 ENTRYPOINT ["/entrypoint.sh"]
