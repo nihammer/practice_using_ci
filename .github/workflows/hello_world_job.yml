@@ -23,9 +23,10 @@ jobs:
           path: ./ci
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./checksumResultOfDockerBuildContext.txt') }}
 
-      - if: ${{ steps.cache-docker-build.outputs.cache-hit == 'false' }}
+      - if: ${{ steps.cache-docker-build.outputs.cache-hit != 'true' }}
         name: Docker build
         continue-on-error: true
+        timeout-minutes: 30
         run: |
           docker build -t say-hello ./ci
           docker save -o ./ci/say-hello.tar say-hello
