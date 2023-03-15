@@ -8,7 +8,7 @@ RUN /bin/cp -f /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 ## 共通パッケージのインストール
 RUN apt-get update && apt-get -y install git curl
 ## AWS CLI のインストール
-RUN apt-get update && apt-get -y install wget python
+RUN apt-get -y install wget python
 RUN wget https://bootstrap.pypa.io/pip/2.7/get-pip.py
 RUN python get-pip.py
 RUN pip install --upgrade awscli
@@ -37,8 +37,8 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf \
  && chmod +x $HOME/.asdf/asdf.sh \
  && chmod +x $HOME/.asdf/completions/asdf.bash \
  && bash -c ". ~/.bashrc" \
- && apt-get update && apt-get -y install automake autoconf libreadline-dev libncurses-dev libssl-dev libyaml-dev libxslt-dev libffi-dev libtool unixodbc-dev
-ENV PATH ~/.asdf/bin/:$PATH
+ apt-get -y install automake autoconf libreadline-dev libncurses-dev libssl-dev libyaml-dev libxslt-dev libffi-dev libtool unixodbc-dev
+ENV PATH ~/.asdf/bin/:~/.asdf/shims/:$PATH
 
 ### Erlang のインストール
 # RUN apt-get update && apt-get -y install make rebar xsltproc fop libxml2-utils
@@ -53,8 +53,12 @@ ENV PATH ~/.asdf/bin/:$PATH
 #  && ~/.asdf/bin/asdf global elixir 1.6.6
 
 ### Ruby のインストール
-# RUN apt-get update && apt-get -y install ruby \
-#  && gem update --system
+# RUN apt-get install -y zlib1g-dev \
+#  && ~/.asdf/bin/asdf plugin-add ruby https://github.com/asdf-vm/asdf-ruby.git \
+#  && ~/.asdf/bin/asdf install ruby 3.2.1 \
+#  && ~/.asdf/bin/asdf global ruby 3.2.1 \
+#  && ~/.asdf/shims/gem install rubygems-update -v 3.4.8 \
+#  && ~/.asdf/shims/update_rubygems
 
 ### NodeJS/npm のインストール
 # RUN apt-get update && apt-get -y install gnupg libdigest-sha-perl
@@ -76,9 +80,6 @@ EXPOSE 22
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 COPY entrypoint.sh /entrypoint.sh
-
-# Echo environtment variables
-RUN env
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
 ENTRYPOINT ["/entrypoint.sh"]

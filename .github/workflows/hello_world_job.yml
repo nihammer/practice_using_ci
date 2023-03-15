@@ -34,13 +34,15 @@ jobs:
       - name: Try to run docker command
         run: |
           docker load -i ./ci/say-hello.tar
+          docker run --name sayhello_3d0210 --label a5c76b --workdir /github/workspace --rm -v "/home/runner/work/practice_using_ci/practice_using_ci":"/github/workspace" say-hello  "Mona the Octocat" "This is a comment." "This is the third argument."
 
-      - name: Hello world action step
-        uses: ./.github/actions/docker-build-action # Uses an action in the root directory
-        id: hello
-        with:
-          who-to-greet: 'Mona the Octocat'
-          comments: 'This is a comment.'
+      # - name: Hello world action step
+      #   uses: ./.github/actions/docker-build-action # Uses an action in the root directory
+      #   id: hello
+      #   with:
+      #     who-to-greet: 'Mona the Octocat'
+      #     comments: 'This is a comment.'
+
       # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+      # - name: Get the output time
+      #   run: echo "The time was ${{ steps.hello.outputs.time }}"
