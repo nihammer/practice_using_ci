@@ -26,6 +26,9 @@ jobs:
         run: |
           docker build --file ./ci/Dockerfile.base --tag say-hello-base ./ci
           docker save -o ./say-hello-base.tar say-hello-base
+      - name: Load the docker base image from file
+        run: |
+          docker load -i ./say-hello-base.tar
 
 
 
