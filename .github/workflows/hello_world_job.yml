@@ -20,7 +20,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./ci/Dockerfile.base') }}
 
       - if: ${{ steps.cache-docker-base-image-build.outputs.cache-hit != 'true' }}
-        name: Docker build
+        name: Docker base image build
         continue-on-error: true
         timeout-minutes: 30
         run: |

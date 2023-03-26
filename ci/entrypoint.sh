@@ -11,5 +11,7 @@ echo -e "pwd:\n"
 pwd
 echo -e "ls -la\n"
 ls -la
+echo -e "ls -la ./ci\n"
+ls -la ./ci
 echo -e "List environment variables:\n"
 env
