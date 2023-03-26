@@ -10,6 +10,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Cache docker base image build
+        id: cache-docker-base-image-build
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-docker-base-image-build
+        with:
+          path: ./say-hello-base.tar
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('./ci/Dockerfile.base') }}
+
+      - if: ${{ steps.cache-docker-base-image-build.outputs.cache-hit != 'true' }}
+        name: Docker build
+        continue-on-error: true
+        timeout-minutes: 30
+        run: |
+          docker build --file ./ci/Dockerfile.base --target say-hello-base
+          docker save -o ./say-hello-base.tar say-hello-base
+
+
+
       - name: Checksum the "./ci" directory
         run: |
           find ./ci -type f -exec cksum {} \; | sort -k 2 > checksumResultOfDockerBuildContext.txt
