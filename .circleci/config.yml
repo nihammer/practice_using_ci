@@ -4,12 +4,12 @@ version: 2.1
 
 # Orbs are reusable packages of CircleCI configuration that you may share across projects, enabling you to create encapsulated, parameterized commands, jobs, and executors that can be used across multiple projects.
 # See: https://circleci.com/docs/2.0/orb-intro/
-orbs:
+# orbs:
   # The python orb contains a set of prepackaged CircleCI configuration you can use repeatedly in your configuration files
   # Orb commands and jobs help you with common scripting around a language/tool
   # so you dont have to copy and paste it everywhere.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
-  python: circleci/python@1.5.0
+  # python: circleci/python@1.5.0
 
 commands:
   first_command:
@@ -58,7 +58,7 @@ jobs:
       env:
         type: string
     docker:
-      - image: circleci/python:3.6.1
+      - image: cimg/python:3.8.4
     steps:
       - checkout
       - run:
@@ -67,7 +67,7 @@ jobs:
             echo "The current environment name in the build job is << parameters.env >>"
   development:
     docker:
-      - image: circleci/python:3.6.1
+      - image: cimg/python:3.8.4
     steps:
       - first_command:
           env_name: development
@@ -76,7 +76,7 @@ jobs:
           deploy_file_name: deploy
   production:
     docker:
-      - image: circleci/python:3.6.1
+      - image: cimg/python:3.8.4
     steps:
       - first_command:
           env_name: production
