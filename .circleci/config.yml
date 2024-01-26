@@ -27,6 +27,9 @@ commands:
             elif [ "<< parameters.env_name >>" == "development" ]; then
               echo "This is the development environment."
             fi
+            pwd
+            mkdir new-directory
+            cd new-directory
 
   second_command:
     parameters: 
@@ -39,9 +42,14 @@ commands:
           name: print the s3 file path
           command: |
             echo "S3 URL: s3://path-url.com/<< parameters.env_file_path >>"
+            pwd
+            mkdir new-directory2
+            cd new-directory2
       - run:
           name: deploy
           command: |
+            pwd
+            ls -a
             chmod +x ./scripts/*
             ./scripts/<< parameters.deploy_file_name >>.sh
 
