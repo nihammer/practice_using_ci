@@ -22,10 +22,10 @@ commands:
           name: print the current environment name
           command: |
             echo "The current environment name in this test is << parameters.env_name >>"
-            if [ "<< parameters.env_name >>" == "prod" ]; then
+            if [ "<< parameters.env_name >>" == "production" ]; then
               echo "This is the production environment."
-            elif [ "<< parameters.env_name >>" == "stg" ]; then
-              echo "This is the staging environment."
+            elif [ "<< parameters.env_name >>" == "development" ]; then
+              echo "This is the development environment."
             fi
 
   second_command:
@@ -70,24 +70,18 @@ jobs:
       - image: circleci/python:3.6.1
     steps:
       - first_command:
-          env_name: dev
-  staging:
-    docker:
-      - image: circleci/python:3.6.1
-    steps:
-      - first_command:
-          env_name: stg
+          env_name: development
       - second_command:
-          env_file_path: staging/.env.staging
+          env_file_path: config/.env.development
           deploy_file_name: deploy
   production:
     docker:
       - image: circleci/python:3.6.1
     steps:
       - first_command:
-          env_name: prod
+          env_name: production
       - second_command:
-          env_file_path: master/.env.production
+          env_file_path: config/.env.production
           deploy_file_name: deploy
 
 # Invoke jobs via workflows
@@ -101,13 +95,7 @@ workflows:
           env: development
           filters:
             branches:
-              only: develop
-      - build:
-          name: build-staging
-          env: staging
-          filters:
-            branches:
-              only: staging
+              only: dev
       - build:
           name: build-production
           env: production
@@ -119,13 +107,7 @@ workflows:
             - build-development
           filters:
             branches:
-              only: develop
-      - staging:
-          requires:
-            - build-staging
-          filters:
-            branches:
-              only: staging
+              only: dev
       - production:
           requires:
             - build-production
